@@ -5,10 +5,37 @@ import { Link } from "react-scroll";
 import NextLink from "next/link";
 import Image from "next/image";
 import { i18n } from "@/translate/i18n";
+import { useEffect, useState } from 'react';
+import { ArrowUp } from 'phosphor-react';
 
 function Footer({ ...rest }) {
   const date = new Date();
   const year = date.getFullYear();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', toggleVisibility);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <section
       className="flex items-center pt-14 w-full justify-center"
@@ -63,7 +90,7 @@ function Footer({ ...rest }) {
                     duration={1400}
                     className="dark:text-sky-400 hover:text-black transition-colors duration-[0.3s] ease-linear cursor-pointer"
                   >
-                   {i18n.t('footer.aosc.link_2')}
+                    {i18n.t('footer.aosc.link_2')}
                   </Link>
                 </li>
                 <li>
@@ -99,7 +126,7 @@ function Footer({ ...rest }) {
 
             <div className="w-52">
               <h3 className="text-xl dark:text-white">
-              {i18n.t('footer.community.title')}
+                {i18n.t('footer.community.title')}
               </h3>
               <ul className="flex flex-col">
                 <li>
@@ -161,7 +188,7 @@ function Footer({ ...rest }) {
             </div>
             <div className="w-52">
               <h3 className="text-xl dark:text-white">
-              {i18n.t('footer.project.title')}
+                {i18n.t('footer.project.title')}
               </h3>
               <ul className="flex flex-col">
                 <li>
@@ -170,7 +197,7 @@ function Footer({ ...rest }) {
                     target="_blank"
                     className="dark:text-sky-400 hover:text-black transition-colors duration-[0.3s] ease-linear"
                   >
-                   {i18n.t('footer.project.link_1')}
+                    {i18n.t('footer.project.link_1')}
                   </NextLink>
                 </li>
                 <li>
@@ -208,15 +235,19 @@ function Footer({ ...rest }) {
               href="https://github.com/angolaosc/aosf-website/blob/main/LICENSE"
               className="dark:text-sky-400"
             >
-             {i18n.t('footer.copyright.link_2')}
+              {i18n.t('footer.copyright.link_2')}
             </NextLink>
           </p>
+
+
           <button
-            onClick={() => animateScroll.scrollToTop()}
-            className="dark:text-white hover:text-black transition-colors duration-[0.3s] ease-linear"
+            className={`${isVisible ? 'block' : 'hidden'
+              } dark:bg-btn dark:text-btc fixed bottom-6 right-6 bg-red-500 text-white hover:bg-red-400 p-4 rounded-full shadow-md transition-opacity duration-300`}
+            onClick={scrollToTop}
           >
-            {i18n.t('footer.button_top')}
+            <ArrowUp className="h-4 w-4" />
           </button>
+
         </div>
       </div>
     </section>
